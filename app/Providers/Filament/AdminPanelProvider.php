@@ -32,8 +32,8 @@ class AdminPanelProvider extends PanelProvider
             ->darkModeBrandLogo('/images/alfa-mart-dark-logo.png')
             ->brandLogoHeight("50px")
             ->colors([
-                'primary' => Color::Blue,
-                'secondary' => Color::Blue,
+                'primary' => Color::Red,
+                'secondary' => Color::Red,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
