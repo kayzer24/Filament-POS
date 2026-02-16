@@ -15,7 +15,9 @@ class Order extends Model
         'discount',
         'discount_amount',
         'total_payment',
-        'status'
+        'status',
+        'payment_method',
+        'payment_status',
     ];
 
     public function customer(): BelongsTo

@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->databaseNotifications()
             ->brandLogo('/images/alfa-mart-logo.png')
             ->darkModeBrandLogo('/images/alfa-mart-dark-logo.png')
             ->brandLogoHeight("50px")

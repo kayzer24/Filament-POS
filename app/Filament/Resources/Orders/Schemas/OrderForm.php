@@ -169,6 +169,21 @@ class OrderForm
                             ->readOnly()
                             ->default(0)
                             ->columnSpanFull(),
+
+                        Select::make('payment_method')
+                            ->columnSpan(2)
+                            ->options([
+                                'cash' => 'Cash',
+                                'card' => 'Card',
+                                'wallet' => 'Wallet',
+                            ])->default('cash'),
+                        Select::make('payment_status')
+                            ->columnSpan(2)
+                            ->options([
+                                'paid' => 'Paid',
+                                'unpaid' => 'Unpaid',
+                                'failed' => 'Failed'
+                            ])->default('unpaid'),
                     ])->columnSpan(1)
                     ->columns(4),
             ])->columns(3);

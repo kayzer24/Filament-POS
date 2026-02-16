@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use App\Filament\Exports\OrderExporter;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -18,18 +20,32 @@ class OrdersTable
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('Order ID'),
+                    ->label('ID'),
                 TextColumn::make('customer.name')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('total_price')
                     ->money('eur', locale: 'fr_FR')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('discount')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->suffix('%'),
                 TextColumn::make('total_payment')
                     ->money('eur', locale: 'fr_FR')
                     ->sortable(),
+
+                TextColumn::make('payment_method')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+
+                TextColumn::make('payment_status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'paid' => 'success',
+                        'unpaid' => 'danger',
+                    }),
+
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -42,6 +58,7 @@ class OrdersTable
                     ->sortable(),
                 TextColumn::make('date')
                     ->date()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -67,6 +84,9 @@ class OrdersTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                ExportAction::make()->exporter(OrderExporter::class)
             ]);
     }
 }
