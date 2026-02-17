@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 class ProductResource extends Resource
@@ -23,9 +25,42 @@ class ProductResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquares2x2;
 
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Squares2x2;
+
     protected static string | UnitEnum | null $navigationGroup = "Product Management";
 
     protected static ?int $navigationSort = 4;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('is_active', true)->count();
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'description', 'sku', 'barcode'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Name' => $record->name ?? 'N/A',
+            'Category' => $record->category?->name ?? 'N/A',
+            'Brand' => $record->brand?->name ?? 'N/A',
+            'SKU' => $record->sku ?? 'N/A',
+            'Barcode' => $record->barcode ?? 'N/A',
+        ];
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return self::getUrl('view', ['record' => $record]);
+    }
+
+    public static function getNavigationBadgeTooltip(): string|Htmlable|null
+    {
+        return 'Active products number';
+    }
 
     public static function form(Schema $schema): Schema
     {

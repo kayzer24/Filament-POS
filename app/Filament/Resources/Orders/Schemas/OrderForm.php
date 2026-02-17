@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderForm
 {
@@ -45,7 +46,31 @@ class OrderForm
                                         $set('phone', $customer->phone ?? null);
                                         $set('city', $customer->city ?? null);
                                         $set('country', $customer->country ?? null);
-                                    }),
+                                    })
+                                    ->createOptionForm([
+                                        Section::make([
+                                            TextInput::make('name')
+                                                ->columnSpanFull()
+                                                ->required(),
+                                            TextInput::make('email')
+                                                ->label('Email address')
+                                                ->email()
+                                                ->required(),
+                                            TextInput::make('phone')
+                                                ->tel(),
+                                        ])->columns(2)
+                                            ->description('Personal details'),
+                                        Section::make([
+                                            TextInput::make('address_line1 '),
+                                            TextInput::make('address_line2 '),
+                                            TextInput::make('postcode'),
+                                            TextInput::make('city'),
+                                            TextInput::make('state'),
+                                            TextInput::make('country'),
+                                        ])
+                                            ->columns(2)
+                                            ->description('Billing details'),
+                                    ]),
                                 Grid::make()
                                     ->columns(3)
                                     ->schema([
@@ -64,8 +89,11 @@ class OrderForm
                                     ->relationship()
                                     ->schema([
                                         Select::make('product_id')
-                                            ->relationship('product', 'name')
+                                            ->relationship('product', 'name', modifyQueryUsing: fn(Builder $query) => $query->where('is_active', true))
                                             ->reactive()
+                                            ->preload()
+                                            ->searchable()
+                                            ->columnSpanFull()
                                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                             ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                                 $product = Product::find($state);

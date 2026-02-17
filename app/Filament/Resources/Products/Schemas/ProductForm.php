@@ -99,13 +99,36 @@ class ProductForm
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             static::generateSku($get, $set);
-                        }),
+                        })
+                        ->createOptionForm([
+                            TextInput::make('name')
+                                ->maxLength(255)
+                                ->required(),
+                            FileUpload::make('image')
+                                ->maxSize(2028)
+                                ->directory('Products\Brands')
+                                ->image(),
+                            Toggle::make('is_active')
+                                ->default(true)
+                                ->required(),
+                        ]),
                     Select::make('category_id')
                         ->relationship('category', 'name', fn($query) => $query->where('is_active', true))
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             static::generateSku($get, $set);
-                        }),
+                        })
+                        ->createOptionForm([
+                            TextInput::make('name')
+                                ->maxLength(255)
+                                ->required(),
+                            FileUpload::make('image')
+                                ->maxSize(2028)
+                                ->directory('Products\Categories')
+                                ->image(),
+                            Toggle::make('is_active')
+                                ->required(),
+                        ]),
                     Select::make('sub_category_id')
                         ->label('Sub-category')
                         ->options(function (Get $get) {
@@ -120,6 +143,25 @@ class ProductForm
                         ->dehydrated()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             static::generateSku($get, $set);
+                        })
+                        ->createOptionForm(fn(Get $get) =>[
+                            Select::make('category_id')
+                                ->options(Category::pluck('name', 'id'))
+                                ->default($get('category_id'))
+                                ->dehydrated()
+                                ->disabled(),
+                            TextInput::make('name')
+                                ->maxLength(255)
+                                ->required(),
+                            FileUpload::make('image')
+                                ->maxSize(2048)
+                                ->directory('Products\SubCategories')
+                                ->image(),
+                            Toggle::make('is_active')
+                                ->required(),
+                        ])
+                        ->createOptionUsing(function (array $data): int {
+                            return SubCategory::create($data)->getKey();
                         }),
                     FileUpload::make('image')
                         ->columnSpanFull()

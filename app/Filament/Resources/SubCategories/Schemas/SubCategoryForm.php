@@ -16,7 +16,18 @@ class SubCategoryForm
             ->components([
                 Select::make('category_id')
                     ->relationship('category', 'name')
-                    ->required(),
+                    ->required()
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->maxLength(255)
+                            ->required(),
+                        FileUpload::make('image')
+                            ->maxSize(2028)
+                            ->directory('Products\Categories')
+                            ->image(),
+                        Toggle::make('is_active')
+                            ->required(),
+                    ]),
                 TextInput::make('name')
                     ->maxLength(255)
                     ->required(),
