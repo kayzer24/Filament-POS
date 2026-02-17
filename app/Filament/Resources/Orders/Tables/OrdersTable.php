@@ -87,6 +87,9 @@ class OrdersTable
             ])
             ->headerActions([
                 ExportAction::make()->exporter(OrderExporter::class)
+                ->label('Export CSV')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('primary')
             ]);
     }
 }

@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo('/images/alfa-mart-logo.png')
             ->darkModeBrandLogo('/images/alfa-mart-dark-logo.png')
             ->brandLogoHeight("50px")
+            ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::Red,
                 'secondary' => Color::Red,
