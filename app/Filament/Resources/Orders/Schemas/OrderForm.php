@@ -122,6 +122,11 @@ class OrderForm
                                         TextInput::make('quantity')
                                             ->numeric()
                                             ->minValue(1)
+                                            ->maxValue(function (Get $get) {
+                                                $productId = $get('product_id');
+                                                $product = Product::find($productId);
+                                                return $product?->stock ?? 0;
+                                            })
                                             ->default(1)
                                             ->reactive()
                                             ->afterStateUpdated(function ($state, Set $set, Get $get) {

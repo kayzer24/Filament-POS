@@ -29,4 +29,31 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    protected static function booted()
+    {
+        static::updated(function ($order) {
+            $originalStatus = $order->getOriginal('status');
+
+            if ($order->isDirty('status') && $order->status === 'completed') {
+                foreach ($order->orderDetails as $detail) {
+                    $product = $detail->product;
+
+                    if ($product) {
+                        $product->decrement('stock', $detail->quantity);
+                    }
+                }
+            }
+
+            if ($order->isDirty('status') && $originalStatus === 'completed' && $order->status === 'cancelled') {
+                foreach ($order->orderDetails as $detail) {
+                    $product = $detail->product;
+
+                    if ($product) {
+                        $product->increment('stock', $detail->quantity);
+                    }
+                }
+            }
+        });
+    }
 }
