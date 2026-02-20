@@ -12,6 +12,8 @@ class Order extends Model
         'customer_id',
         'total_price',
         'date',
+        'tax_rate',
+        'tax_amount',
         'discount',
         'discount_amount',
         'total_payment',

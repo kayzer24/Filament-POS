@@ -1,23 +1,38 @@
 <?php
 
-namespace App\Filament\Resources\Orders\Tables;
+namespace App\Filament\Resources\Customers\RelationManagers;
 
-use App\Filament\Exports\OrderExporter;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\DissociateAction;
+use Filament\Actions\DissociateBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ExportAction;
-use Filament\Actions\ViewAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class OrdersTable
+class OrdersRelationManager extends RelationManager
 {
-    public static function configure(Table $table): Table
+    protected static string $relationship = 'Orders';
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                //
+            ]);
+    }
+
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('id')
             ->columns([
                 TextColumn::make('id')
                     ->label('ID'),
@@ -28,10 +43,6 @@ class OrdersTable
                     ->money('eur', locale: 'fr_FR')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                TextColumn::make('tax_amount')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->money('eur', locale: 'fr_FR'),
                 TextColumn::make('discount')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->suffix('%'),
@@ -76,24 +87,22 @@ class OrdersTable
             ->filters([
                 //
             ])
+            ->headerActions([
+                CreateAction::make(),
+                AssociateAction::make(),
+            ])
             ->recordActions([
                 ActionGroup::make([
-                    ViewAction::make(),
                     EditAction::make(),
+                    DissociateAction::make(),
                     DeleteAction::make(),
-                ]),
-
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    DissociateBulkAction::make(),
                     DeleteBulkAction::make(),
                 ]),
-            ])
-            ->headerActions([
-                ExportAction::make()->exporter(OrderExporter::class)
-                ->label('Export CSV')
-                ->icon('heroicon-o-document-arrow-down')
-                ->color('primary')
             ]);
     }
 }

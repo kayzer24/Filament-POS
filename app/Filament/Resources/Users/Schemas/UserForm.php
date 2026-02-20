@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Field;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -33,6 +34,11 @@ class UserForm
                         ->revealable()
                         ->dehydrated(fn(?string $state): bool => filled($state))
                         ->required(fn(string $operation): bool => $operation === 'create'),
+                    Select::make('roles')
+                        ->relationship('roles', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable()
                 ])
                     ->columns(2)
                     ->description('User Details'),

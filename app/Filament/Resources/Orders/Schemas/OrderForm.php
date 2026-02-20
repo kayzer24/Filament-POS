@@ -109,6 +109,11 @@ class OrderForm
                                                 $total = collect($items)->sum(fn($item) => $item['subtotal'] ?? 0);
                                                 $set('../../total_price', $total);
 
+                                                $tax_rate = $get('../../tax_rate');
+                                                $tax_amount = $total * $tax_rate / 100;
+                                                $set('../../tax_amount', $tax_amount);
+                                                $set('../../total_payment', $total + $tax_amount);
+
                                                 $discount = $get('../../discount');
                                                 $discount_amount = $total * $discount / 100;
                                                 $set('../../discount_amount', $discount_amount);
@@ -137,10 +142,14 @@ class OrderForm
                                                 $total = collect($items)->sum(fn($item) => $item['subtotal'] ?? 0);
                                                 $set('../../total_price', $total);
 
+                                                $tax_rate = $get('../../tax_rate');
+                                                $tax_amount = $total * $tax_rate / 100;
+                                                $set('../../tax_amount', $tax_amount);
+
                                                 $discount = $get('../../discount');
                                                 $discount_amount = $total * $discount / 100;
                                                 $set('../../discount_amount', $discount_amount);
-                                                $set('../../total_payment', $total - $discount_amount);
+                                                $set('../../total_payment', $total + $tax_amount - $discount_amount);
 
                                             }),
                                         TextInput::make('subtotal')
@@ -148,7 +157,7 @@ class OrderForm
                                             ->readOnly()
                                             ->default(0)
                                             ->prefix('€'),
-                                    ])->columns(4)
+                                    ])->columns(3)
                                     ->hiddenLabel()
                                     ->addAction(fn (Action $action) => $action
                                         ->label('add Product')
@@ -177,6 +186,14 @@ class OrderForm
                             ->prefix('€')
                             ->default(0)
                             ->columnSpanFull(),
+                        TextInput::make('tax_rate')
+                            ->default(20)
+                            ->suffix('%')
+                            ->columnSpan(2),
+                        TextInput::make('tax_amount')
+                            ->default(0)
+                            ->prefix('€')
+                            ->columnSpan(2),
                         TextInput::make('discount')
                             ->suffix('%')
                             ->default(0)

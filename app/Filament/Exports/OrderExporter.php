@@ -19,6 +19,8 @@ class OrderExporter extends Exporter
                 ->label('ID'),
             ExportColumn::make('customer.name'),
             ExportColumn::make('total_price'),
+            ExportColumn::make('tax_rate'),
+            ExportColumn::make('tax_amount'),
             ExportColumn::make('discount'),
             ExportColumn::make('discount_amount'),
             ExportColumn::make('total_payment'),
