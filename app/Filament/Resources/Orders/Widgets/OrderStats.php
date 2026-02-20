@@ -24,7 +24,7 @@ class OrderStats extends StatsOverviewWidget
                 ->description('Order being completed successfully')
                 ->descriptionIcon('heroicon-m-check-badge')
                 ->color('success'),
-            Stat::make('Total Revenue', Number::format(Order::where('status', 'completed')->sum('total_payment'), 0) . '€')
+            Stat::make('Total Revenue', Number::format(Order::where('status', 'completed')->sum('total_payment'), 2) . ' €')
                 ->description('Total payment from completed orders')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('danger'),

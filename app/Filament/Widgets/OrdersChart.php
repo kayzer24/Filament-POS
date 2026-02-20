@@ -11,6 +11,8 @@ class OrdersChart extends ChartWidget
 {
     protected ?string $heading = 'Orders Chart';
 
+    protected static ?int $sort = 1;
+
     protected function getData(): array
     {
         $data = Trend::model(Order::class)

@@ -11,6 +11,8 @@ class CustomersWidget extends ChartWidget
 {
     protected ?string $heading = 'Customers Chart';
 
+    protected static ?int $sort = 2;
+
     protected function getData(): array
     {
         $data = Trend::model(Customer::class)
