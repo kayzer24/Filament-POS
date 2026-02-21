@@ -22,7 +22,8 @@ class CustomerForm
                     TextInput::make('phone')
                         ->tel(),
                 ])
-                ->description('Personal details'),
+                ->description('Personal details')
+                ->columns(2),
                 Section::make([
                     TextInput::make('address_line1 '),
                     TextInput::make('address_line2 '),
@@ -31,7 +32,8 @@ class CustomerForm
                     TextInput::make('state'),
                     TextInput::make('country'),
                 ])
-                    ->description('Billing details'),
+                    ->description('Billing details')
+                    ->columns(2),
             ])->columns(1);
     }
 }

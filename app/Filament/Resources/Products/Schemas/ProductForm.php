@@ -2,21 +2,23 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Models\BaseUnit;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
+use App\Models\Uom;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Number;
 
 class ProductForm
 {
@@ -63,13 +65,60 @@ class ProductForm
                         RichEditor::make('description')
                             ->columnSpanFull(),
                         TextInput::make('base_price')
-                            ->required()
                             ->numeric()
-                            ->prefix('$'),
+                            ->prefix('$')
+                            ->reactive()
+                            ->afterStateUpdated(function (callable $get, callable $set) {
+                                $set('gross_margin', Number::format(($get('price')??0) - ($get('base_price')??0)), 0);
+                            }),
                         TextInput::make('price')
                             ->required()
                             ->numeric()
-                            ->prefix('$'),
+                            ->prefix('$')
+                            ->reactive()
+                            ->afterStateUpdated(function (callable $get, callable $set) {
+                                $set('gross_margin', Number::format(($get('price')??0) - ($get('base_price')??0)), 0);
+                            }),
+                        TextInput::make('gross_margin')
+                            ->readOnly()
+                            ->numeric()
+                            ->prefix('$')
+                            ->reactive()
+                            ->afterStateUpdated(function (callable $get, callable $set) {
+                                $set('gross_margin', Number::format(($get('price')??0) - ($get('base_price')??0)), 0);
+                            })
+                            ->afterStateHydrated(function (callable $get, callable $set) {
+                                $set('gross_margin', Number::format(($get('price')??0) - ($get('base_price')??0)), 0);
+                            }),
+                        Select::make('uom_id')
+                            ->relationship('uom', 'code')
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $uom = Uom::with('baseUnit')->find($state);
+
+                                if ($uom) {
+                                    $set('base_unit', $uom->baseUnit?->id);
+                                    $set('purchase_unit', $uom->id);
+                                }
+                            })
+                            ->afterStateHydrated(function ($state, callable $set) {
+                                $uom = Uom::with('baseUnit')->find($state);
+
+                                if ($uom) {
+                                    $set('base_unit', $uom->baseUnit?->id);
+                                    $set('purchase_unit', $uom->id);
+                                }
+                            }),
+                        Select::make('base_unit')
+                            ->reactive()
+                            ->disabled()
+                            ->options(BaseUnit::pluck('name', 'id')),
+                        Select::make('purchase_unit')
+                            ->reactive()
+                            ->disabled()
+                            ->options(Uom::pluck('name', 'id')),
+                        TextInput::make('conversion_factor')
+                            ->label('Conversion'),
                         TextInput::make('stock')
                             ->required()
                             ->numeric(),
@@ -88,7 +137,7 @@ class ProductForm
                             Toggle::make('in_stock')
                                 ->required(),
                         ]),
-                    ])->columns(2)
+                    ])->columns(3)
                         ->description('Product Details')
                 ])->columnSpan(2),
 
