@@ -38,7 +38,7 @@ class BaseUnitsTable
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make()
-                ]),
+                ])->button(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

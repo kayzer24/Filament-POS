@@ -10,8 +10,11 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrdersTable
 {
@@ -74,7 +77,22 @@ class OrdersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('created_at')
+                    ->schema([
+                        DatePicker::make('Start'),
+                        DatePicker::make('End'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['Start'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['End'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    })
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -91,9 +109,9 @@ class OrdersTable
             ])
             ->headerActions([
                 ExportAction::make()->exporter(OrderExporter::class)
-                ->label('Export CSV')
+                ->label('Export Report')
                 ->icon('heroicon-o-document-arrow-down')
-                ->color('primary')
+                ->color('success')
             ]);
     }
 }

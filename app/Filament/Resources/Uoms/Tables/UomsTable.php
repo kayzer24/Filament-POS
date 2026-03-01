@@ -45,7 +45,7 @@ class UomsTable
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make()
-                ]),
+                ])->button(),
 
             ])
             ->toolbarActions([

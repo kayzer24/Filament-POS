@@ -22,10 +22,13 @@ use Illuminate\Database\Eloquent\Model;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
+    protected static ?string $navigationLabel = 'Sales';
+    protected static ?string $breadcrumb = 'Sales';
+    protected static ?string $modelLabel = 'Sale';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyEuro;
 
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::ShoppingBag;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::CurrencyEuro;
 
     public static function getNavigationBadge(): ?string
     {

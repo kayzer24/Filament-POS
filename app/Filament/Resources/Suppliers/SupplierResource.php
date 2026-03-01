@@ -20,7 +20,9 @@ class SupplierResource extends Resource
 {
     protected static ?string $model = Supplier::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTruck;
+
+    protected static string | BackedEnum | null $activeNavigationIcon = Heroicon::Truck;
 
     protected static ?string $recordTitleAttribute = 'name';
 
