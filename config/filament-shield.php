@@ -14,6 +14,7 @@ return [
     | a cluster, and decide which permission tabs to display.
     |
     */
+    'enable' => false,
 
     'shield_resource' => [
         'slug' => 'shield/roles',

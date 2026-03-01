@@ -26,7 +26,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            $table->dropColumn([
+                'uom_id',
+                'base_unit',
+                'purchase_unit',
+                'conversion_factor',
+                'gross_margin',
+            ]);
         });
     }
 };

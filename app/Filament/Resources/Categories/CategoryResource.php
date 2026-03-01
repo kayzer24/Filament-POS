@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Categories;
 
+use App\Filament\Clusters\Products\ProductsCluster;
 use App\Filament\Resources\Categories\Pages\CreateCategory;
 use App\Filament\Resources\Categories\Pages\EditCategory;
 use App\Filament\Resources\Categories\Pages\ListCategories;
@@ -26,9 +27,11 @@ class CategoryResource extends Resource
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Square3Stack3d;
 
-    protected static string | UnitEnum | null $navigationGroup = "Product Management";
+    //protected static string | UnitEnum | null $navigationGroup = "Product Management";
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string$cluster = ProductsCluster::class;
 
     public static function getGloballySearchableAttributes(): array
     {

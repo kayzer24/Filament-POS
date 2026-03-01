@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Brands;
 
+use App\Filament\Clusters\Products\ProductsCluster;
 use App\Filament\Resources\Brands\Pages\CreateBrand;
 use App\Filament\Resources\Brands\Pages\EditBrand;
 use App\Filament\Resources\Brands\Pages\ListBrands;
@@ -26,9 +27,11 @@ class BrandResource extends Resource
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::BookmarkSquare;
 
-    protected static string | UnitEnum | null $navigationGroup = "Product Management";
+    //protected static string | UnitEnum | null $navigationGroup = "Product Management";
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string$cluster = ProductsCluster::class;
 
     public static function getGloballySearchableAttributes(): array
     {

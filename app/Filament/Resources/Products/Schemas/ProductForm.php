@@ -93,29 +93,49 @@ class ProductForm
                         Select::make('uom_id')
                             ->relationship('uom', 'code')
                             ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                 $uom = Uom::with('baseUnit')->find($state);
 
-                                if ($uom) {
+                                if (!$uom) return;
+
+                                if (!$get('base_unit')) {
                                     $set('base_unit', $uom->baseUnit?->id);
+                                }
+                                if (!$get('purchase_unit')) {
                                     $set('purchase_unit', $uom->id);
                                 }
+
+//                                if ($uom) {
+//                                    $set('base_unit', $uom->baseUnit?->id);
+//                                    $set('purchase_unit', $uom->id);
+//                                }
                             })
-                            ->afterStateHydrated(function ($state, callable $set) {
+                            ->afterStateHydrated(function ($state, callable $set, callable $get) {
                                 $uom = Uom::with('baseUnit')->find($state);
 
-                                if ($uom) {
+                                if (!$uom) return;
+
+                                if (!$get('base_unit')) {
                                     $set('base_unit', $uom->baseUnit?->id);
+                                }
+                                if (!$get('purchase_unit')) {
                                     $set('purchase_unit', $uom->id);
                                 }
+
+//                                if ($uom) {
+//                                    $set('base_unit', $uom->baseUnit?->id);
+//                                    $set('purchase_unit', $uom->id);
+//                                }
                             }),
                         Select::make('base_unit')
                             ->reactive()
                             ->disabled()
+                            ->dehydrated()
                             ->options(BaseUnit::pluck('name', 'id')),
                         Select::make('purchase_unit')
                             ->reactive()
                             ->disabled()
+                            ->dehydrated()
                             ->options(Uom::pluck('name', 'id')),
                         TextInput::make('conversion_factor')
                             ->label('Conversion'),

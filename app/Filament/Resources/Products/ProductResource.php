@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products;
 
+use App\Filament\Clusters\Products\ProductsCluster;
 use App\Filament\Resources\Products\Pages\CreateProduct;
 use App\Filament\Resources\Products\Pages\EditProduct;
 use App\Filament\Resources\Products\Pages\ListProducts;
@@ -27,9 +28,11 @@ class ProductResource extends Resource
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Squares2x2;
 
-    protected static string | UnitEnum | null $navigationGroup = "Product Management";
+    //protected static string | UnitEnum | null $navigationGroup = "Product Management";
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string$cluster = ProductsCluster::class;
 
     public static function getNavigationBadge(): ?string
     {

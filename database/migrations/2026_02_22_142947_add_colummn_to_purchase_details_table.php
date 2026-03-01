@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('tax_rate', 5,2)->default(0);
-            $table->decimal('tax_amount', 10,2)->default(0);
+        Schema::table('purchase_details', function (Blueprint $table) {
+            $table->decimal('subtotal', 10, 2);
+            $table->string('base_unit');
         });
     }
 
@@ -22,10 +22,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('purchase_details', function (Blueprint $table) {
             $table->dropColumn([
-                'tax_rate',
-                'tax_amount',
+                'subtotal',
+                'base_unit',
             ]);
         });
     }

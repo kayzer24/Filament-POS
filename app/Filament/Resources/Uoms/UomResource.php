@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Uoms;
 
+use App\Filament\Clusters\Products\ProductsCluster;
 use App\Filament\Resources\Uoms\Pages\CreateUom;
 use App\Filament\Resources\Uoms\Pages\EditUom;
 use App\Filament\Resources\Uoms\Pages\ListUoms;
@@ -23,6 +24,10 @@ class UomResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string$cluster = ProductsCluster::class;
 
     public static function form(Schema $schema): Schema
     {

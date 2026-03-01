@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SubCategories;
 
+use App\Filament\Clusters\Products\ProductsCluster;
 use App\Filament\Resources\SubCategories\Pages\CreateSubCategory;
 use App\Filament\Resources\SubCategories\Pages\EditSubCategory;
 use App\Filament\Resources\SubCategories\Pages\ListSubCategories;
@@ -26,9 +27,11 @@ class SubCategoryResource extends Resource
 
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::Square2Stack;
 
-    protected static string | UnitEnum | null $navigationGroup = "Product Management";
+    //protected static string | UnitEnum | null $navigationGroup = "Product Management";
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
+
+    protected static ?string$cluster = ProductsCluster::class;
 
     public static function getGloballySearchableAttributes(): array
     {
